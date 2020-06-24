@@ -1,0 +1,53 @@
+# Mayhem by https://forallsecure.com
+# Mayhemfile: configuration file for testing your target with Mayhem
+# Format: YAML 1.1
+
+# Mayhemfile version specifier
+version: '1.3'
+
+# project: The organization and project name to run under Mayhem
+#
+# $ORGANIZATION/$PROJECT
+#
+project: mayhem/netflix
+
+# target: The target name. This will be replaced at build time to
+#         reflect the branch under analysis.
+#
+# $HARNESS-NAME-$BRANCH
+#
+target: dial-reference
+
+#  baseimage: The tag of the Docker Image uploaded to Mayhem for analysis.
+#             This will be replaced at build time because the tag will
+#             include the name of the branch under analysis.
+#
+#             This image must exist in a publicly accessible registry, such
+#             as Dockerhub; or uploaded into the registry included in the
+#             Mayhem deployment (what is done in this demonstration).
+#
+baseimage: $MAYHEM_DOCKER_REGISTRY/mayhem-netflix-dial-reference:latest
+
+# duration: Time that analysis will run for in seconds - if absent, run forever
+#           Because the primary branch is continuously fuzzed, this can be set to
+#           blank (for infinite). Other branches only run regression tests which
+#           do not consider the duration property.
+#
+duration: 86400
+
+# advanced_triage:  Turns on extra test case processing (completing a run will
+#                   take longer)
+#
+advanced_triage: false
+
+# List of commands used to test the target
+cmds:
+  - cmd: /dial-reference/server/dialserver
+    dictionary: /http.dict
+    env:
+      LD_LIBRARY_PATH: /dial-reference/server
+
+    network:
+      url: tcp://localhost:56790 # protocol, host and port to analyze
+      is_client: false           # target is a client-side program
+      timeout: 2.0               # max seconds for sending data
