@@ -1,5 +1,7 @@
 # Mayhem Example (dial-reference)
 
+[![Build Status](https://travis-ci.org/ForAllSecure/Mayhem-with-TravisCI-netflix-dial-example.svg?branch=master)](https://travis-ci.org/ForAllSecure/Mayhem-with-TravisCI-netflix-dial-example)
+
 This repository has been forked from the official [dial-reference repository](https://github.com/Netflix/dial-reference)
 repository in GitHub. Additional content has been added to serve as a reference
 architecture on how to integrate [ForAllSecure](https://forallsecure.com) Mayhem
