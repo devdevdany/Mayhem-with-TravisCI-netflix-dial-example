@@ -151,7 +151,7 @@ if [[ "${TRAVIS_BRANCH}" = "${PRIMARY_BRANCH}" ]]; then
 else
     # Find the latest run on the primary branch to determine the project/target
     # from which to download test cases.
-    LATEST_PRIMARY_TARGET=$(${CLI} show -n ${MAYHEM_ORGANIZATION} --format csv "^netflix/${MAYHEM_PRIMARY_TARGET}(?i)/\d+" | tail -n +2 | head -1 | cut -d"," -f1 | cut -d"/" -f"1,2"|| true)
+    LATEST_PRIMARY_TARGET=$(${CLI} show -n ${MAYHEM_ORGANIZATION} --format csv "netflix/${MAYHEM_PRIMARY_TARGET}" | tail -n +2 | head -1 | cut -d"," -f1 | cut -d"/" -f"1,2"|| true)
     if [[ -n "${LATEST_PRIMARY_TARGET}" ]]; then
 
         # Create a folder to download primary test suite into. This is to avoid
