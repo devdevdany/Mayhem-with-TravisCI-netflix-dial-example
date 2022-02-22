@@ -11,8 +11,8 @@ jobs:
   include:
   - stage: run-mayhem
     script:
-    - docker build -t ${IMAGE_TAG} .
-    - travis_wait 60 mayhem/scripts/run-mayhem.sh || travis_terminate 1;
+    - docker build -t ${IMAGE_TAG} -f Dockerfile .
+    - mayhem/scripts/run-mayhem.sh
 env:
   global:
     # Additional environment values - either specify here or in your

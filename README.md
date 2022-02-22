@@ -1,3 +1,38 @@
+# Getting Started
+
+To get started with this example, you will need to fork this repository and complete the following process in Travis CI:
+
+> **Note:** You will also need to create a `mayhem` organization in the Mayhem UI prior to executing the pipeline, as the [run-mayhem.sh](mayhem/scripts/run-mayhem.sh) script uses a Mayhem Organization as the target run namespace.
+
+## Travis CI Setup
+
+1. Go to the [Travis CI](https://www.travis-ci.com/) website and sign up or log into an existing account. Make sure that your GitHub account has been linked to your Travis CI account.
+2. Within the Travis CI dashboard, you should now see your forked repository as well as the two branches: `master` and `CVE-2019-10028-FIX`.
+3. Within the forked GitHub repo, navigate to the [.travis.yml](.travis.yml) file and set the following environment variables for your `master` and `CVE-2019-10028-FIX` branches. These credentials will be used to authenticate with the Mayhem instance and push the corresponding netflix Docker target.
+
+    ```yaml
+    # Additional environment values - either specify here or in your
+    # Travis-CI job configuration.
+    - MAYHEM_URL=https://my-company.forallsecure.com
+    - DOCKER_REGISTRY=my-company.forallsecure.com:5000
+    - IMAGE_TAG=my-company.forallsecure.com:5000/mayhem-netflix-dial-reference:${TRAVIS_BRANCH}
+    - MAYHEM_TOKEN="AT1.abcdefg"
+    ```
+
+## Execute Continuous Fuzzing
+
+For Continuous Fuzzing, Mayhem will fuzz the latest version of your software residing on the primary (master) branch, and by default, set Continuous Fuzzing runs with an infinite duration—only stopping a current Mayhem run and beginning a new Mayhem run when a new commit has been pushed to the primary branch. Thus, the name "Continuous Fuzzing".
+
+1. Navigate to your forked repository in Travis CI and click on *More options* > *Trigger build*. Execute a new pipeline for the `master` branch.
+2. The new pipeline for the `master` branch should now build the netflix Docker target and upload the corresponding Docker image to the specified Mayhem instance. A new Mayhem run for the bugged `dial-reference-master` target will then execute and find the underlying defects.
+
+## Execute Regression Testing
+
+For Regression Testing, Mayhem will execute regression tests on new changes or code using previously generated crashing test cases found during Continuous Fuzzing to determine if known defects have been fixed.
+
+1. Navigate to your forked repository in Travis CI and click on *More options* > *Trigger build*. Execute a new pipeline for the `CVE-2019-10028-FIX` branch.
+2. The new pipeline for the `CVE-2019-10028-FIX` branch should now build the netflix Docker target and upload the corresponding Docker image to the specified Mayhem instance with the same test corpus generated from the `dial-reference-master` target. A Mayhem run for the fixed `dial-reference-cve-2019-10028-fix` target will then execute to ensure that defects have been resolved.
+
 # Mayhem Example (dial-reference)
 
 [![Build Status](https://travis-ci.org/ForAllSecure/Mayhem-with-TravisCI-netflix-dial-example.svg?branch=master)](https://travis-ci.org/ForAllSecure/Mayhem-with-TravisCI-netflix-dial-example)
